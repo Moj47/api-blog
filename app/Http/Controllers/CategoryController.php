@@ -74,4 +74,9 @@ class CategoryController extends Controller
         $category->delete();
         return $this->successResponse($category,200,'Category Deleted Succesfully');
     }
+
+    public function posts(Category $category)
+    {
+        return new CategoryResource($category->load('posts'));
+    }
 }

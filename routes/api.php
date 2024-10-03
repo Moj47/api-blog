@@ -12,3 +12,4 @@ Route::post('/user',[UserController::class,'store']);
 Route::resource('posts',PostController::class);
 
 Route::resource('categories',CategoryController::class);
+Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
