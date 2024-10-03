@@ -79,4 +79,9 @@ class CategoryController extends Controller
     {
         return new CategoryResource($category->load('posts'));
     }
+
+    public function comments(Category $category)
+    {
+        return new CategoryResource($category->load('comments'));
+    }
 }

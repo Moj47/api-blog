@@ -12,8 +12,11 @@ Route::post('/user',[UserController::class,'store']);
 
 Route::resource('posts',PostController::class);
 Route::get('posts/{post}/comments',[PostController::class,'comments']);
+
+
 Route::resource('categories',CategoryController::class);
 Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
+Route::get('categories/{category}/comments',[CategoryController::class,'comments']);
 
 Route::post('comments',[CommentController::class,'store']);
 Route::delete('comments/{comment}',[CommentController::class,'delete']);
