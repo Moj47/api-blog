@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    protected $fillable=['title'];
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
     use HasFactory;
     public function posts()
