@@ -31,7 +31,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validate=Validator::make($request->all(),[
-            'title'=>'required|string|max:25',
+            'title'=>'required|string|max:55',
             'text'=>'required|string|max:1200',
             'image'=>'nullable|image',
             'category_id'=>'required|integer|exists:categories,id'
@@ -69,16 +69,54 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $validate=Validator::make($request->all(),[
+            'title'=>'required|string|max:55',
+            'text'=>'required|string|max:1200',
+            'image'=>'nullable|image',
+            'category_id'=>'required|integer|exists:categories,id'
+        ]);
+
+        if($validate->fails())
+            return $this->errorResponse(400,$validate->messages());
+
+        $slug=$post->slug;
+        if($post->slug != $request->slug)
+        {
+            $slug=Str::slug($request->title);
+
+            if($count=Post::where('slug', 'LIKE', "%{$slug}%")->count())
+            {
+                $slug=$slug.$count+1;
+            }
+        }
+        $imageName=$post->image;
+        if($request->image !=null)
+        {
+            unlink('storage/'.'img/'.'posts/'.$post->image);
+            $imageName=Carbon::now()->microsecond.'.'.$request->image->extension();
+            $request->image->storeAs('img/posts',$imageName,'public');
+        }
+
+
+            $post->update([
+                'title'=>$request->title,
+                'text'=>$request->text,
+                'slug'=>$slug,
+                'image'=>$imageName,
+                'category_id'=>$request->category_id,
+            ]);
+            return new PostResource($post);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        unlink('storage/'.'img/'.'posts/'.$post->image);
+        return new PostResource($post);
     }
 }
