@@ -19,7 +19,8 @@ class PostResource extends JsonResource
             'text'=>$this->text,
             'image'=>url('storage/'.'img/'.'posts/'.$this->image),
             'slug'=>$this->slug,
-            'category_id'=>$this->category_id
+            'category_id'=>$this->category_id,
+            'comments'=>CommentResource::collection($this->whenLoaded('comments'))
         ];
     }
 }

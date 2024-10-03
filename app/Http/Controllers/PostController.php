@@ -119,4 +119,9 @@ class PostController extends Controller
         unlink('storage/'.'img/'.'posts/'.$post->image);
         return new PostResource($post);
     }
+
+    public function comments(Post $post)
+    {
+        return new PostResource($post->load('comments'));
+    }
 }
