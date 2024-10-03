@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -13,3 +14,6 @@ Route::resource('posts',PostController::class);
 
 Route::resource('categories',CategoryController::class);
 Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
+
+Route::post('comments',[CommentController::class,'store']);
+Route::delete('comments/{comment}',[CommentController::class,'delete']);
