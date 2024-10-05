@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Comment;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
@@ -118,6 +119,76 @@ class PostTest extends TestCase
             'title' => $post2->title,
             'text' => $post2->text,
             'category_id' => $post2->category_id
+        ]);
+    }
+    public function testDeleteAPostWithDestroyMethod()
+    {
+        $post = Post::factory()->create();
+        $user = User::factory()->create(['type' => 'admin']);
+        $this->assertDatabaseHas('posts', [
+            'title' => $post->title,
+            'text' => $post->text,
+            'category_id' => $post->category_id
+        ]);
+        $response=$this->actingAs($user)
+        ->deleteJson(route('posts.destroy',$post->id));
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'title',
+                'text',
+                'image',
+                'slug',
+                'category_id',
+            ],
+        ]);
+
+        $this->assertDatabaseEmpty('posts');
+        $this->assertDatabaseMissing('posts',[
+            'title' => $post->title,
+            'text' => $post->text,
+            'category_id' => $post->category_id
+        ]);
+    }
+    public function testDeleteAPostWithDestroyMethodWhenPostHasSomeComments()
+    {
+        $post = Post::factory()->create();
+        $user = User::factory()->create(['type' => 'admin']);
+        for($i=0;$i<5;$i++)
+        {
+            Comment::create([
+                'title'=>'test',
+                'text'=>'test',
+                'user_id'=>$user->id,
+                'post_id'=>$post->id,
+                'category_id'=>$post->category_id
+            ]);
+        }
+        $this->assertDatabaseHas('posts', [
+            'title' => $post->title,
+            'text' => $post->text,
+            'category_id' => $post->category_id
+        ]);
+        $response=$this->actingAs($user)
+        ->deleteJson(route('posts.destroy',$post->id));
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'title',
+                'text',
+                'image',
+                'slug',
+                'category_id',
+            ],
+        ]);
+
+        $this->assertDatabaseEmpty('posts');
+        $this->assertDatabaseMissing('posts',[
+            'title' => $post->title,
+            'text' => $post->text,
+            'category_id' => $post->category_id
         ]);
     }
 }
