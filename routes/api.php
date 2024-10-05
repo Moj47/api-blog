@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::post('/user',[UserController::class,'store']);
+Route::post('/register',[UserController::class,'store']);
+Route::post('/login',[UserController::class,'login']);
 
 Route::resource('posts',PostController::class);
 Route::get('posts/{post}/comments',[PostController::class,'comments']);

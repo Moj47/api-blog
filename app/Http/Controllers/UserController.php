@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -48,7 +49,29 @@ class UserController extends Controller
             'token'=>$token
         ],200);
     }
+    public function login(Request $request)
+    {
+        $validate=Validator::make($request->all(),[
+            'email'=>'required | email',
+            'password'=>'required'
+        ]);
+        if($validate->fails())
+        {
+            return $this->errorResponse(403,$validate->messages());
+        }
+        $user=User::where('email',$request->email)->first();
 
+        if(!$user || !Hash::check($request->password , $user->password ))
+        {
+            return $this->errorResponse(404,'User not found!');
+        }
+        $token=$user->createToken('myApp')->plainTextToken;
+
+        return $this->successResponse([
+            'user'=>$user,
+            'token'=>$token
+        ],200);
+    }
 
     /**
      * Display the specified resource.
