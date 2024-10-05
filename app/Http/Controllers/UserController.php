@@ -73,9 +73,11 @@ class UserController extends Controller
         ],200);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function logout()
+    {
+      auth()->user()->tokens()->delete();
+      return $this->successResponse('Logged out',200);
+    }
     public function show(string $id)
     {
         //
