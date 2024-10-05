@@ -38,5 +38,23 @@ class PostTest extends TestCase
         ]);
 
     }
+    public function testShowAPostWithShowMethod()
+    {
+        $post=Post::factory()->create();
+        $user=User::factory()->create();
+        $response = $this->actingAs($user)
+        ->getJson(route('posts.show',$post->id));
 
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'title',
+                'text',
+                'image',
+                'slug',
+                'category_id',
+            ],
+        ]);
+    }
 }
