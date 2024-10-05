@@ -191,4 +191,39 @@ class PostTest extends TestCase
             'category_id' => $post->category_id
         ]);
     }
+    public function testSeeCommentsOfAPost()
+    {
+        $user = User::factory()->create(['type' => 'admin']);
+        $post = Post::factory()->create();
+        for($i=0;$i<5;$i++)
+        {
+            Comment::create([
+                'title'=>'test',
+                'text'=>'test',
+                'user_id'=>$user->id,
+                'post_id'=>$post->id,
+                'category_id'=>$post->category_id
+            ]);
+        }
+        $response=$this->actingAs($user)
+        ->getJson(route('posts.comments',$post->id));
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'title',
+                'text',
+                'image',
+                'slug',
+                'category_id',
+                'comments' => [
+                    '*' => [
+                        'title',
+                        'text',
+                        'user_id',
+                        'post_id',
+                    ],
+                ],
+            ],
+        ]);
+    }
 }

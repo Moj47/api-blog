@@ -15,7 +15,7 @@ Route::post('logout',[UserController::class,'logout'])->middleware('auth:sanctum
 Route::group(['middleware'=>'auth:sanctum'],function(){
 
     Route::resource('posts',PostController::class);
-    Route::get('posts/{post}/comments',[PostController::class,'comments']);
+    Route::get('posts/{post}/comments',[PostController::class,'comments'])->name('posts.comments');
     Route::resource('categories',CategoryController::class);
     Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
     Route::get('categories/{category}/comments',[CategoryController::class,'comments']);
