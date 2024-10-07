@@ -17,8 +17,8 @@ Route::group(['middleware'=>'auth:sanctum'],function(){
     Route::resource('posts',PostController::class);
     Route::get('posts/{post}/comments',[PostController::class,'comments'])->name('posts.comments');
     Route::resource('categories',CategoryController::class);
-    Route::get('categories/{category}/posts',[CategoryController::class,'posts']);
-    Route::get('categories/{category}/comments',[CategoryController::class,'comments']);
+    Route::get('categories/{category}/posts',[CategoryController::class,'posts'])->name('categories.posts');
+    Route::get('categories/{category}/comments',[CategoryController::class,'comments'])->name('categories.comments');
 
     Route::post('comments',[CommentController::class,'store']);
     Route::delete('comments/{comment}',[CommentController::class,'delete']);
