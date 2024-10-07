@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Access\Gate;
 use App\Http\Resources\CommentResource;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,6 +14,8 @@ class CommentController extends Controller
     use ApiResponser;
    public function store(Request $request)
    {
+    if (!Gate::allows('isadmin')) {
+
         $validate=Validator::make($request->all(),[
             'title'=>'string|max:50|required',
             'text'=>'required|max:250|string',
@@ -31,6 +34,9 @@ class CommentController extends Controller
             'category_id'=>$request->category_id,
         ]);
         return new CommentResource($comment);
+        }
+        else
+        return $this->errorResponse(400,'Admin cant post a comment');
    }
    public function delete(Comment $comment)
    {
