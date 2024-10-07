@@ -20,8 +20,8 @@ Route::group(['middleware'=>'auth:sanctum'],function(){
     Route::get('categories/{category}/posts',[CategoryController::class,'posts'])->name('categories.posts');
     Route::get('categories/{category}/comments',[CategoryController::class,'comments'])->name('categories.comments');
 
-    Route::post('comments',[CommentController::class,'store']);
-    Route::delete('comments/{comment}',[CommentController::class,'delete']);
+    Route::post('comments',[CommentController::class,'store'])->name('comments.create');
+    Route::delete('comments/{comment}',[CommentController::class,'delete'])->name('comments.delete');
 });
 
 
