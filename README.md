@@ -24,6 +24,6 @@ Welcome to the **API Blog** repository! This project implements a RESTful API fo
 - **Framework:** [Laravel](https://laravel.com/)
 - **Database:** [MySQL](https://www.mysql.com/)
 - **Testing:** [PHPUnit](https://phpunit.de/) for unit and feature testing
-- **Authentication:** Laravel's built-in **Sanctum** or **JWT** for secure user authentication
+- **Authentication:** Laravel's built-in **Sanctum** for secure user authentication
 
 
